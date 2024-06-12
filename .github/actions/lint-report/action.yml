@@ -1,0 +1,9 @@
+name: Lint
+description: Create Eslint report
+
+runs:
+  using: "composite"
+  steps:
+    - name: Eslint report
+      shell: bash
+      run: yarn lint:report || echo "::warning::yarn lint:report command is missing"

@@ -12,6 +12,23 @@ jobs:
       with:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
+        
+    - name: Test and lint
+      shell: bash
+      run: |
+          export TEST_AND_LINT_CMD="node -v && \
+            npm -v && \
+            echo '//npm.pkg.github.com/:_authToken=${{ secrets.pat-read-package }}' >~/.npmrc && \
+            yarn install --prefer-offline --force && \
+            yarn test --watchAll=false --coverage --detectOpenHandles --forceExit && \
+            yarn lint:report" && \
+            docker run -v "$(pwd)":/app -i ${{ env.DOCKER_IMAGE_TAG }} bash -c "$TEST_AND_LINT_CMD"
+
+    - name: Copy files from docker into host
+      shell: bash
+      run: |
+          docker cp $(docker ps -lq):/app/ ./
+
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@v2.2.0 # Ex: v2.1.0, See the latest version at https://github.com/marketplace/actions/sonarcloud-scan
       env:

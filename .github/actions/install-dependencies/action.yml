@@ -1,0 +1,41 @@
+name: Install dependencies
+description: Install dependencies
+
+inputs:
+  env-name:
+    description: "Environment name"
+    required: true
+  build-dir:
+    description: "Node build directory"
+    required: true
+  cache-key:
+    description: "Cache key value"
+    required: true
+  pat-read-package:
+    description: "Github personal access token"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Recover dependencies from cache
+      id: recover-node_modules-cache
+      uses: actions/cache/restore@v4.0.0
+      with:
+        path: node_modules
+        key: ${{ inputs.cache-key }}-node_modules-${{ hashFiles('./yarn.lock','./package.json') }}
+        restore-keys: ${{ inputs.cache-key }}-node_modules-
+
+    - name: Install dependencies
+      shell: bash
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.pat-read-package }}
+      if: steps.recover-node_modules-cache.outputs.cache-hit != 'true'
+      run: yarn
+
+    - name: Store dependencies in cache
+      if: steps.recover-node_modules-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4.0.0
+      with:
+        path: node_modules
+        key: ${{ inputs.cache-key }}-node_modules-${{ hashFiles('./yarn.lock','./package.json') }}
