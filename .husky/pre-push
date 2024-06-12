@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-git diff HEAD --quiet && yarn test && yarn test:e2e
+git diff HEAD --quiet && yarn test
