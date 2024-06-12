@@ -1,9 +1,0 @@
-name: Unit and Integration Test
-description: Run test-suite with jest
-
-runs:
-  using: "composite"
-  steps:
-    - name: Test
-      shell: bash
-      run: yarn test --watchAll=false --coverage --detectOpenHandles 

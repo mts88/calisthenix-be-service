@@ -91,11 +91,11 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "coverageDirectory": "./coverage",
+    "coverageDirectory": "../coverage",
     "collectCoverage": true,
     "clearMocks": true,
     "setupFilesAfterEnv": [
-      "./jest.setup.js"
+      "../jest.setup.js"
     ],
     "testEnvironment": "node"
   }
