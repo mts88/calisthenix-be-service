@@ -1,3 +1,6 @@
+/* eslint-disable unicorn/prefer-module */
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable unicorn/prevent-abbreviations */
 const { pathsToModuleNameMapper } = require('ts-jest');
 const { compilerOptions } = require('../tsconfig.json');
 
@@ -10,9 +13,10 @@ module.exports = {
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
-  setupFilesAfterEnv: ['../jest.setup.js'],
+  setupFilesAfterEnv: ['./jest.setup.js'],
   modulePaths: [compilerOptions.baseUrl],
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/',
   }),
+  clearMocks: true,
 };
