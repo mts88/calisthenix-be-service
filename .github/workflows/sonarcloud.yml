@@ -2,7 +2,7 @@ on:
   # Trigger analysis when pushing in master or pull requests, and when creating
   # a pull request.
   pull_request:
-      types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened]
 name: Main Workflow
 
 env:
@@ -12,37 +12,35 @@ jobs:
   sonarcloud:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    #- name: Build and push Docker images
-    #  uses: docker/build-push-action@v5.4.0
-    #  with:
-    #    context: .
-    #    push: false
-    #    tags: ${{ env.DOCKER_IMAGE_TAG }}
-   
-    - name: Set up Node.js 20
-      uses: actions/setup-node@v4
-      with:
-       node-version: 20.9
+      #- name: Build and push Docker images
+      #  uses: docker/build-push-action@v5.4.0
+      #  with:
+      #    context: .
+      #    push: false
+      #    tags: ${{ env.DOCKER_IMAGE_TAG }}
 
-    - name: Install dependencies
-      run: yarn install
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.9
 
-    - name: Lint Project
-      run: yarn run lint:report
+      - name: Install dependencies
+        run: yarn install
 
-    - name: Run unit tests
-      run: yarn run test:coverage
+      - name: Lint Project
+        run: yarn run lint:report
 
-    - name: Run e2e
-      run: yarn run e2e
+      - name: Run unit tests
+        run: yarn run test:coverage
 
-    - name: SonarCloud Scan
-      uses: sonarsource/sonarcloud-github-action@v2.2.0 # Ex: v2.1.0, See the latest version at https://github.com/marketplace/actions/sonarcloud-scan
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Run e2e
+        run: yarn run test:e2e
 
-
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@v2.2.0 # Ex: v2.1.0, See the latest version at https://github.com/marketplace/actions/sonarcloud-scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
